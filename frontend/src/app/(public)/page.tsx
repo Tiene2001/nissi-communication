@@ -10,7 +10,7 @@ export default function EntryPage() {
   const handleEnter = () => {
     if (entered) return
     setEntered(true)
-    setTimeout(() => router.push('/accueil?entered=1'), 600)
+    setTimeout(() => router.push('/accueil?entered=1'), 820)
   }
 
   return (
