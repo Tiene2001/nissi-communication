@@ -5,7 +5,7 @@ import ClientsSection   from '@/components/public/ClientsSection'
 import ContactForm      from '@/components/public/ContactForm'
 import ArrivalOverlay   from '@/components/public/ArrivalOverlay'
 
-const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'
+const API = process.env.API_INTERNAL_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'
 
 const HERO_DEFAULT: HeroContent = {
   title:        'Les esprits de la com',
