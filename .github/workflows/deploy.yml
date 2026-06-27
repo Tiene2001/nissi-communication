@@ -1,8 +1,7 @@
 name: Deploy — NISSI Communication
 
 on:
-  push:
-    branches: [main]
+  workflow_dispatch:
 
 jobs:
   deploy:
