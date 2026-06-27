@@ -4,6 +4,11 @@ import { useRouter } from 'next/navigation'
 import MediaUpload from './MediaUpload'
 import api from '@/lib/api'
 
+const PUBLIC_API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'
+function resolveUrl(url: string) {
+  return url?.startsWith('/') ? `${PUBLIC_API}${url}` : url
+}
+
 interface Result   { label: string; value: string }
 interface MediaItem { url: string; type: string; order: number }
 
@@ -254,7 +259,7 @@ export default function ProjectForm({ initialData, projectId }: Props) {
                     <span className="material-symbols-outlined text-brand" style={{ fontSize: '2rem' }}>play_circle</span>
                   </div>
                 ) : (
-                  <img src={m.url} alt="" className="h-24 w-full object-cover" />
+                  <img src={resolveUrl(m.url)} alt="" className="h-24 w-full object-cover" />
                 )}
                 <button
                   type="button" onClick={() => handleRemoveMedia(i)}
