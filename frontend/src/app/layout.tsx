@@ -5,6 +5,10 @@ import Providers from './providers'
 export const metadata: Metadata = {
   title: 'NISSI Communication — Les esprits de la com',
   description: 'Cabinet de conseil en stratégie de marque et en influence. NISSI Communication accompagne les organisations dans la structuration et le pilotage de leur visibilité.',
+  icons: {
+    icon: '/images/logo_nissi_blanc.png',
+    apple: '/images/logo_nissi_blanc.png',
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
