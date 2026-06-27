@@ -2,6 +2,11 @@
 import { useState } from 'react'
 import Link from 'next/link'
 
+const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'
+function resolveUrl(url: string) {
+  return url?.startsWith('/') ? `${API}${url}` : url
+}
+
 interface Project {
   id: string
   title: string
@@ -19,7 +24,8 @@ interface Props {
 
 function getThumb(project: Project | null): string | null {
   if (!project) return null
-  return project.media?.find(m => m.type === 'IMAGE')?.url ?? null
+  const url = project.media?.find(m => m.type === 'IMAGE')?.url ?? null
+  return url ? resolveUrl(url) : null
 }
 
 function SideCard({ project, direction, onClick }: {

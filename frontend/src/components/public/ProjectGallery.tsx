@@ -1,6 +1,11 @@
 'use client'
 import { useState, useRef } from 'react'
 
+const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'
+function resolveUrl(url: string) {
+  return url?.startsWith('/') ? `${API}${url}` : url
+}
+
 interface Media {
   id: string
   url: string
@@ -70,7 +75,7 @@ export default function ProjectGallery({ media, title }: Props) {
               {m.type === 'VIDEO' ? (
                 <>
                   <video
-                    src={m.url}
+                    src={resolveUrl(m.url)}
                     muted
                     playsInline
                     preload="metadata"
@@ -89,7 +94,7 @@ export default function ProjectGallery({ media, title }: Props) {
                 </>
               ) : (
                 <img
-                  src={m.url}
+                  src={resolveUrl(m.url)}
                   alt={`${title} - ${i + 1}`}
                   className="w-full h-full object-cover shadow-2xl"
                 />
@@ -114,7 +119,7 @@ export default function ProjectGallery({ media, title }: Props) {
           </button>
           {lightboxItem.type === 'VIDEO' ? (
             <video
-              src={lightboxItem.url}
+              src={resolveUrl(lightboxItem.url)}
               controls
               autoPlay
               className="max-w-[90%] max-h-[85vh]"
@@ -122,7 +127,7 @@ export default function ProjectGallery({ media, title }: Props) {
             />
           ) : (
             <img
-              src={lightboxItem.url}
+              src={resolveUrl(lightboxItem.url)}
               alt="Image agrandie"
               className="max-w-[90%] max-h-[85vh] object-contain"
               onClick={e => e.stopPropagation()}

@@ -1,3 +1,10 @@
+const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'
+
+function resolveUrl(url: string) {
+  if (!url) return url
+  return url.startsWith('/') ? `${API}${url}` : url
+}
+
 interface Client {
   id: string
   name: string
@@ -21,7 +28,7 @@ export default function ClientsSection({ clients }: Props) {
           {clients.map(client => (
             <div key={client.id}>
               <img
-                src={client.logo}
+                src={resolveUrl(client.logo)}
                 alt={client.name}
                 className="h-12 w-auto object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300 cursor-pointer"
               />
