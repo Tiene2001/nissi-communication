@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    container_name: nissi_api
+    environment:
+      - NODE_ENV=production
+    env_file:
+      - .env
+    ports:
+      - "3001:3001"
+    volumes:
+      - uploads:/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: nissi_postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-nissi}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-nissi_pass}
+      POSTGRES_DB: ${POSTGRES_DB:-nissi_db}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-nissi}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: nissi_redis
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:alpine
+    container_name: nissi_nginx
+    volumes:
+      - uploads:/uploads:ro
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - api
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  uploads:
