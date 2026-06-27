@@ -1,0 +1,170 @@
+@import url('https://fonts.googleapis.com/css2?family=Epilogue:wght@500;700&family=Inter:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+section[id], main[id] {
+  scroll-margin-top: 120px;
+}
+
+/* Galerie projet — effet chevauchement horizontal */
+.gallery-item {
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), margin 0.5s ease;
+}
+.gallery-item:not(:first-child) {
+  margin-left: -4rem;
+}
+.gallery-item:hover {
+  transform: translateY(-20px) scale(1.05);
+  z-index: 30;
+  margin-right: 2rem;
+}
+.gallery-item:hover + .gallery-item {
+  margin-left: 0;
+}
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Page d'entrée — animation d'apparition */
+@keyframes entry-fade-up {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.entry-appear {
+  animation: entry-fade-up 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+}
+
+
+/* Carousel — animations de slide directionnelles */
+@keyframes carousel-in-right {
+  from { opacity: 0; transform: translateX(70px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes carousel-in-left {
+  from { opacity: 0; transform: translateX(-70px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.carousel-enter-right {
+  animation: carousel-in-right 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+.carousel-enter-left {
+  animation: carousel-in-left 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+:root {
+  --color-brand: #FF8000;
+  --color-surface: #121414;
+  --color-text: #e2e2e2;
+}
+
+body {
+  background-color: #121414;
+  color: #e2e2e2;
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+}
+
+/* Style brutalist : 0 border-radius par défaut, sauf exception rounded-full pour les cercles */
+/* .rounded-pill est réservé au header flottant nav pill */
+*:not(.rounded-full):not(.rounded-full *):not(.rounded-pill):not(.rounded-pill *) {
+  border-radius: 0 !important;
+}
+
+/* ── Smoke drift animation ── */
+@keyframes smoke-drift-css {
+  0%   { transform: translateX(0%)   translateY(0%)   scale(1.2);  }
+  33%  { transform: translateX(-3%)  translateY(-2%)  scale(1.25); }
+  66%  { transform: translateX(-6%)  translateY(-4%)  scale(1.28); }
+  100% { transform: translateX(-10%) translateY(-7%)  scale(1.2);  }
+}
+
+/* Header flottant pill — exception brutalist explicite */
+.rounded-pill {
+  border-radius: 40px !important;
+}
+
+/* ── Scroll reveal ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.12s; }
+.reveal-delay-2 { transition-delay: 0.24s; }
+.reveal-delay-3 { transition-delay: 0.36s; }
+.reveal-delay-4 { transition-delay: 0.48s; }
+
+/* ── Menu mobile slide ── */
+@keyframes menu-slide-down {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.mobile-menu-open {
+  animation: menu-slide-down 0.25s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ── Contact form success ── */
+@keyframes contact-success {
+  from { opacity: 0; transform: scale(0.94) translateY(12px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* ── Scroll indicator bounce ── */
+@keyframes scroll-bounce {
+  0%, 100% { transform: translateY(0); opacity: 0.5; }
+  50%       { transform: translateY(8px); opacity: 1; }
+}
+.scroll-bounce {
+  animation: scroll-bounce 1.8s ease-in-out infinite;
+}
+
+/* Service cards — effet au hover */
+.service-card {
+  transition: transform 350ms ease, box-shadow 350ms ease, border-color 350ms ease, background 350ms ease;
+}
+.service-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 32px rgba(255, 128, 0, 0.12);
+  border-color: rgba(255, 128, 0, 0.4) !important;
+  background: rgba(255, 128, 0, 0.03);
+}
+
+
+@layer components {
+  .btn-primary {
+    @apply bg-brand text-black font-headline font-bold px-8 py-4 uppercase tracking-label hover:bg-brand-dark transition-colors;
+  }
+  .btn-secondary {
+    @apply border border-white text-white font-body font-bold px-8 py-4 uppercase tracking-label hover:border-brand hover:text-brand transition-colors;
+  }
+  .card {
+    @apply border border-white/10 hover:border-brand transition-colors;
+  }
+  .section-gap {
+    @apply py-40;
+  }
+  .container-nissi {
+    @apply max-w-screen-xl mx-auto px-20;
+  }
+  .label {
+    @apply font-body font-bold text-xs uppercase tracking-label text-brand;
+  }
+  .headline-xl {
+    @apply font-headline font-bold text-8xl leading-none tracking-tighter;
+  }
+  .headline-lg {
+    @apply font-headline font-bold text-6xl leading-tight tracking-tight;
+  }
+  .headline-md {
+    @apply font-headline font-medium text-3xl leading-10;
+  }
+}
