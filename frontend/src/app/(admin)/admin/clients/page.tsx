@@ -4,6 +4,11 @@ import { useSession } from 'next-auth/react'
 import ClientForm from '@/components/admin/ClientForm'
 import api from '@/lib/api'
 
+const PUBLIC_API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'
+function resolveUrl(url: string) {
+  return url?.startsWith('/') ? `${PUBLIC_API}${url}` : url
+}
+
 interface Client {
   id: string
   name: string
@@ -79,7 +84,7 @@ export default function AdminClientsPage() {
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
           {clients.map(client => (
             <div key={client.id} className="card p-6 bg-surface-container text-center">
-              <img src={client.logo} alt={client.name} className="h-12 w-auto object-contain mx-auto mb-4 filter grayscale" />
+              <img src={resolveUrl(client.logo)} alt={client.name} className="h-12 w-auto object-contain mx-auto mb-4 filter grayscale" />
               <p className="font-body text-on-surface-muted text-xs mb-4">{client.name}</p>
               <div className="flex justify-center gap-3">
                 <button

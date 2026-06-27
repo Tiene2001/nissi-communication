@@ -3,6 +3,11 @@ import { useState } from 'react'
 import api from '@/lib/api'
 import MediaUpload from './MediaUpload'
 
+const PUBLIC_API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'
+function resolveUrl(url: string) {
+  return url?.startsWith('/') ? `${PUBLIC_API}${url}` : url
+}
+
 interface ClientData {
   name: string
   logo: string
@@ -63,7 +68,7 @@ export default function ClientForm({ initialData, onSaved, onCancel }: Props) {
           <div className="flex items-center gap-6">
             <div className="border border-white/10 p-4 bg-surface-highest">
               <img
-                src={form.logo} alt={form.name}
+                src={resolveUrl(form.logo)} alt={form.name}
                 className="h-14 w-auto object-contain filter grayscale"
               />
             </div>
