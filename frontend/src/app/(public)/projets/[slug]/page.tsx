@@ -3,7 +3,12 @@ import ProjectsCarousel from '@/components/public/ProjectsCarousel'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
-const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'
+const API = process.env.API_INTERNAL_URL || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'
+const PUBLIC_API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'
+
+function resolveUrl(url: string) {
+  return url?.startsWith('/') ? `${PUBLIC_API}${url}` : url
+}
 
 async function getProject(slug: string) {
   try {
@@ -30,7 +35,7 @@ export default async function ProjectPage({ params }: { params: { slug: string }
   ])
   if (!project) notFound()
 
-  const heroImage = project.media?.find((m: { type: string }) => m.type === 'IMAGE')?.url
+  const heroImage = resolveUrl(project.media?.find((m: { type: string }) => m.type === 'IMAGE')?.url)
 
   return (
     <>
