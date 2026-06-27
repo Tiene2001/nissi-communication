@@ -24,7 +24,7 @@ jobs:
             git pull origin main
 
             echo "=== Build et redémarrage ==="
-            docker compose -f docker-compose.prod.yml up --build -d
+            docker compose -f docker-compose.prod.yml up --build --force-recreate -d
 
             echo "=== Nettoyage images inutilisées ==="
             docker image prune -f
