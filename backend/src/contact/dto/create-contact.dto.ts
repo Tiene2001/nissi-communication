@@ -1,4 +1,9 @@
-import { IsString, IsEmail, IsOptional } from 'class-validator';
+import { IsString, IsEmail, IsOptional, Length } from 'class-validator';
+
+export class SendOtpDto {
+  @IsEmail()
+  email: string;
+}
 
 export class CreateContactDto {
   @IsString()
@@ -17,4 +22,8 @@ export class CreateContactDto {
 
   @IsString()
   message: string;
+
+  @IsString()
+  @Length(6, 6)
+  otp: string;
 }

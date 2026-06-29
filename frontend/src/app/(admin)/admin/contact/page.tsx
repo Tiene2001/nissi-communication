@@ -59,6 +59,16 @@ export default function ContactAdminPage() {
     }
   }
 
+  const handleDelete = async (id: string) => {
+    if (!confirm('Supprimer définitivement ce message ?')) return
+    try {
+      await api.delete(`/api/admin/contact/${id}`)
+      setMessages(msgs => msgs.filter(m => m.id !== id))
+    } catch {
+      alert('Erreur lors de la suppression')
+    }
+  }
+
   const unreadCount = messages.filter(m => !m.read).length
 
   const filtered = messages.filter(m => {
@@ -151,6 +161,12 @@ export default function ContactAdminPage() {
                       Marquer lu
                     </button>
                   )}
+                  <button
+                    onClick={() => handleDelete(msg.id)}
+                    className="label text-xs text-on-surface-muted hover:text-red-400 transition-colors uppercase"
+                  >
+                    Supprimer
+                  </button>
                 </div>
               </div>
               <p className="font-body text-on-surface-muted text-sm mt-4 leading-relaxed">

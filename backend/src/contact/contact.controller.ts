@@ -4,13 +4,14 @@ import {
   Body,
   Get,
   Patch,
+  Delete,
   Param,
   UseGuards,
   Sse,
   MessageEvent,
 } from '@nestjs/common';
 import { ContactService } from './contact.service';
-import { CreateContactDto } from './dto/create-contact.dto';
+import { CreateContactDto, SendOtpDto } from './dto/create-contact.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { SseJwtGuard } from '../auth/guards/sse-jwt.guard';
 import { Observable, map } from 'rxjs';
@@ -18,6 +19,11 @@ import { Observable, map } from 'rxjs';
 @Controller('contact')
 export class ContactController {
   constructor(private contactService: ContactService) {}
+
+  @Post('send-otp')
+  sendOtp(@Body() dto: SendOtpDto) {
+    return this.contactService.sendOtp(dto.email);
+  }
 
   @Post()
   create(@Body() dto: CreateContactDto) {
@@ -46,5 +52,10 @@ export class AdminContactController {
   @Patch(':id/read')
   markRead(@Param('id') id: string) {
     return this.contactService.markAsRead(id);
+  }
+
+  @Delete(':id')
+  delete(@Param('id') id: string) {
+    return this.contactService.delete(id);
   }
 }
