@@ -4,92 +4,44 @@ import { ConfigService } from '@nestjs/config';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { Subject } from 'rxjs';
 import * as nodemailer from 'nodemailer';
-
-interface OtpEntry { code: string; expiresAt: number; sentAt: number }
+import * as dns from 'dns/promises';
 
 @Injectable()
 export class ContactService {
   private readonly logger = new Logger(ContactService.name);
   private messageSubject = new Subject<any>();
   public messageStream$ = this.messageSubject.asObservable();
-  private readonly otpStore = new Map<string, OtpEntry>();
 
   constructor(
     private prisma: PrismaService,
     private config: ConfigService,
   ) {}
 
-  // ── OTP ────────────────────────────────────────────────────────────────────
+  // ── Vérification MX (arrière-plan, invisible) ──────────────────────────────
 
-  async sendOtp(email: string): Promise<void> {
-    const existing = this.otpStore.get(email);
-    if (existing && Date.now() - existing.sentAt < 60_000) {
-      throw new BadRequestException('Un code a déjà été envoyé. Attendez 60 secondes.');
+  private async hasValidMx(email: string): Promise<boolean> {
+    try {
+      const domain = email.split('@')[1];
+      const records = await dns.resolveMx(domain);
+      return records.length > 0;
+    } catch {
+      return false;
     }
-
-    const code = Math.floor(100000 + Math.random() * 900000).toString();
-    this.otpStore.set(email, { code, expiresAt: Date.now() + 10 * 60_000, sentAt: Date.now() });
-
-    const port = parseInt(this.config.get('SMTP_PORT') ?? '465', 10);
-    const transporter = nodemailer.createTransport({
-      host:   this.config.get('SMTP_HOST'),
-      port,
-      secure: port === 465,
-      auth: { user: this.config.get('SMTP_USER'), pass: this.config.get('SMTP_PASS') },
-    });
-
-    await transporter.sendMail({
-      from:    this.config.get('SMTP_USER'),
-      to:      email,
-      subject: '[NISSI Communication] Code de vérification',
-      html: `
-        <div style="font-family:Arial,sans-serif;max-width:480px;margin:0 auto;padding:24px;">
-          <h2 style="color:#FF8000;margin:0 0 16px;">Vérification de votre email</h2>
-          <p style="color:#333;margin:0 0 24px;">
-            Pour valider votre demande de contact, entrez le code ci-dessous :
-          </p>
-          <div style="font-size:2.2rem;font-weight:900;letter-spacing:0.6em;padding:24px;
-                      background:#f5f5f5;text-align:center;border-left:4px solid #FF8000;">
-            ${code}
-          </div>
-          <p style="color:#888;font-size:0.82rem;margin:16px 0 0;">
-            Ce code est valable <strong>10 minutes</strong>. Ne le partagez pas.
-          </p>
-        </div>
-      `,
-    });
-
-    this.logger.log(`OTP envoyé à ${email}`);
-  }
-
-  private consumeOtp(email: string, otp: string): boolean {
-    const entry = this.otpStore.get(email);
-    if (!entry) return false;
-    if (Date.now() > entry.expiresAt) { this.otpStore.delete(email); return false; }
-    if (entry.code !== otp) return false;
-    this.otpStore.delete(email);
-    return true;
   }
 
   // ── Contact ────────────────────────────────────────────────────────────────
 
   async create(dto: CreateContactDto) {
-    if (!this.consumeOtp(dto.email, dto.otp)) {
-      throw new BadRequestException('Code de vérification invalide ou expiré.');
+    const valid = await this.hasValidMx(dto.email);
+    if (!valid) {
+      throw new BadRequestException("L'adresse email fournie n'est pas valide.");
     }
 
     const expiresAt = new Date();
     expiresAt.setDate(expiresAt.getDate() + 30);
 
     const message = await this.prisma.contactMessage.create({
-      data: {
-        name:    dto.name,
-        email:   dto.email,
-        phone:   dto.phone,
-        subject: dto.subject,
-        message: dto.message,
-        expiresAt,
-      },
+      data: { ...dto, expiresAt },
     });
 
     this.messageSubject.next({
