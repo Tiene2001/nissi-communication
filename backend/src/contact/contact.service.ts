@@ -55,13 +55,23 @@ export class ContactService {
     throw lastError;
   }
 
+  private async resolveNotifyEmail(): Promise<string> {
+    try {
+      const settings = await this.prisma.pageContent.findUnique({ where: { section: 'settings' } });
+      const email = (settings?.data as any)?.notificationEmail;
+      if (email && typeof email === 'string' && email.includes('@')) return email;
+    } catch { /* fallback */ }
+    return this.config.get('NOTIFY_EMAIL') ?? '';
+  }
+
   private async sendEmailNotification(dto: CreateContactDto) {
     const port   = parseInt(this.config.get('SMTP_PORT') ?? '465', 10);
     const host   = this.config.get('SMTP_HOST');
     const user   = this.config.get('SMTP_USER');
     const secure = port === 465;
+    const notifyEmail = await this.resolveNotifyEmail();
 
-    this.logger.log(`SMTP → ${host}:${port} secure=${secure} from=${user}`);
+    this.logger.log(`SMTP → ${host}:${port} secure=${secure} from=${user} to=${notifyEmail}`);
 
     const transporter = nodemailer.createTransport({
       host,
@@ -75,7 +85,7 @@ export class ContactService {
 
     await transporter.sendMail({
       from: this.config.get('SMTP_USER'),
-      to: this.config.get('NOTIFY_EMAIL'),
+      to: notifyEmail,
       subject: `[NISSI] ${dto.subject || 'Nouveau message'} — ${dto.name}`,
       html: `<h2>Nouveau message de contact</h2>
              <p><strong>Nom :</strong> ${dto.name}</p>
