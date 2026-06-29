@@ -1,16 +1,14 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 
 export default function EntryPage() {
-  const router   = useRouter()
   const [entered, setEntered] = useState(false)
 
   const handleEnter = () => {
     if (entered) return
     setEntered(true)
-    setTimeout(() => router.push('/accueil?entered=1'), 820)
+    setTimeout(() => { window.location.href = '/accueil?entered=1' }, 820)
   }
 
   return (
