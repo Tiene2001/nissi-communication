@@ -1,26 +1,14 @@
 import SmokeVideo from './SmokeVideo'
 
 export interface HeroContent {
-  title:        string
-  description:  string
-  tagline:      string
-  stat1_number: string
-  stat1_label:  string
-  stat2_number: string
-  stat2_label:  string
-  stat3_number: string
-  stat3_label:  string
-  stat4_number: string
-  stat4_label:  string
+  title:       string
+  description: string
+  tagline:     string
+  stats:       { number: string; label: string }[]
 }
 
 export default function HeroSection({ content }: { content: HeroContent }) {
-  const stats = [
-    { number: content.stat1_number, label: content.stat1_label },
-    { number: content.stat2_number, label: content.stat2_label },
-    { number: content.stat3_number, label: content.stat3_label },
-    { number: content.stat4_number, label: content.stat4_label },
-  ].filter(s => s.number || s.label)
+  const stats = (content.stats ?? []).filter(s => s.number || s.label)
 
   return (
     <>
@@ -68,11 +56,10 @@ export default function HeroSection({ content }: { content: HeroContent }) {
           </div>
         </div>
 
-        {/* Stats — affichées seulement si au moins une est renseignée */}
         {stats.length > 0 && (
           <div className="max-w-7xl mx-auto mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
-            {stats.map(stat => (
-              <div key={stat.label} className="border border-white/10 px-6 py-5">
+            {stats.map((stat, i) => (
+              <div key={i} className="border border-white/10 px-6 py-5">
                 <div className="text-[#FF8000] font-bold text-3xl md:text-4xl font-sans leading-none mb-1">
                   {stat.number}
                 </div>
