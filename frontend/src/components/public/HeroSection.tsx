@@ -39,7 +39,7 @@ export default function HeroSection({ content }: { content: HeroContent }) {
         <SmokeVideo />
 
         {/* Indicateur de scroll */}
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none scroll-bounce">
+        <div className="absolute bottom-10 left-0 right-0 flex flex-col items-center gap-2 pointer-events-none scroll-bounce">
           <span className="text-white/40 text-[9px] font-bold uppercase tracking-[0.4em]">Défiler</span>
           <div className="w-px h-10 bg-gradient-to-b from-white/40 to-transparent" />
         </div>
