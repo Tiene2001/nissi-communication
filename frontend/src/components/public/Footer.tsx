@@ -146,9 +146,8 @@ export default function Footer() {
           </div>
 
           <div className="text-right">
-            <p className="text-white text-xl font-light">vous serez</p>
-            <p className="text-[#FF8000] text-3xl font-bold leading-none">bien + que</p>
-            <p className="text-[#FF8000] text-4xl font-extrabold uppercase tracking-tighter">satisfait</p>
+            <p className="text-white text-xl font-light">Votre rêve</p>
+            <p className="text-[#FF8000] text-4xl font-extrabold uppercase tracking-tighter">prend forme</p>
           </div>
         </div>
 
