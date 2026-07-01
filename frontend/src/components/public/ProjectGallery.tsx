@@ -1,5 +1,5 @@
 'use client'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 
 const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'
 function resolveUrl(url: string) {
@@ -31,6 +31,17 @@ export default function ProjectGallery({ media, title }: Props) {
   const lightboxItem = lightboxIndex !== null ? items[lightboxIndex] : null
   const lightboxPrev = () => setLightboxIndex(i => i !== null ? (i - 1 + items.length) % items.length : null)
   const lightboxNext = () => setLightboxIndex(i => i !== null ? (i + 1) % items.length : null)
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (lightboxIndex === null) return
+      if (e.key === 'Escape')     setLightboxIndex(null)
+      if (e.key === 'ArrowLeft')  lightboxPrev()
+      if (e.key === 'ArrowRight') lightboxNext()
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [lightboxIndex])
 
   if (!items.length) return null
 
