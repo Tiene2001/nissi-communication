@@ -58,22 +58,22 @@ export default function EntryPage() {
           onClick={handleEnter}
           className="group relative block cursor-pointer bg-transparent border-0 p-0"
         >
-          <span className="absolute -top-1 -left-1 w-5 h-5 border-t-2 border-l-2 border-[#FF8000]" />
-          <span className="absolute -top-1 -right-1 w-5 h-5 border-t-2 border-r-2 border-[#FF8000]" />
-          <span className="absolute -bottom-1 -left-1 w-5 h-5 border-b-2 border-l-2 border-[#FF8000]" />
-          <span className="absolute -bottom-1 -right-1 w-5 h-5 border-b-2 border-r-2 border-[#FF8000]" />
+          <span className="absolute -top-[3px] -left-[3px] w-[7px] h-[7px] border-t border-l border-[#FF8000]" />
+          <span className="absolute -top-[3px] -right-[3px] w-[7px] h-[7px] border-t border-r border-[#FF8000]" />
+          <span className="absolute -bottom-[3px] -left-[3px] w-[7px] h-[7px] border-b border-l border-[#FF8000]" />
+          <span className="absolute -bottom-[3px] -right-[3px] w-[7px] h-[7px] border-b border-r border-[#FF8000]" />
 
           <span
-            className="absolute inset-0 bg-[#FF8000] scale-x-0 group-hover:scale-x-100 origin-left"
-            style={{ transition: 'transform 0.45s cubic-bezier(0.76, 0, 0.24, 1)' }}
+            className="absolute inset-0 bg-[#FF8000] opacity-0 group-hover:opacity-100"
+            style={{ transition: 'opacity 0.4s ease' }}
           />
 
           <span
-            className="relative z-10 block px-16 py-[22px] text-[2rem] md:text-[2.4rem] font-black uppercase text-white group-hover:text-black"
+            className="relative z-10 block px-5 py-[7px] text-[0.7rem] font-black uppercase text-white group-hover:text-black"
             style={{
-              letterSpacing: '0.55em',
+              letterSpacing: '0.45em',
               fontFamily:    "'Epilogue', sans-serif",
-              transition:    'color 0.45s cubic-bezier(0.76, 0, 0.24, 1)',
+              transition:    'color 0.4s ease',
             }}
           >
             ENTRER
