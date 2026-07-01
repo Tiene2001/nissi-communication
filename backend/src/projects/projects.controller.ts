@@ -40,6 +40,11 @@ export class AdminProjectsController {
     return this.projectsService.findAll();
   }
 
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.projectsService.findById(id);
+  }
+
   @Post()
   create(@Body() dto: CreateProjectDto) {
     return this.projectsService.create(dto);

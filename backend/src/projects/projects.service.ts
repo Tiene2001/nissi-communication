@@ -40,6 +40,15 @@ export class ProjectsService {
     });
   }
 
+  async findById(id: string) {
+    const project = await this.prisma.project.findUnique({
+      where: { id },
+      include: { media: { orderBy: { order: 'asc' } } },
+    });
+    if (!project) throw new NotFoundException('Projet non trouvé');
+    return project;
+  }
+
   async create(dto: CreateProjectDto) {
     const slug = slugify(dto.title);
     return this.prisma.project.create({

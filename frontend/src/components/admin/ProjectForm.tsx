@@ -102,14 +102,11 @@ export default function ProjectForm({ initialData, projectId }: Props) {
         id = created.data.id
       }
 
-      // Sauvegarde des médias séparément
-      if (id && form.media.length > 0) {
+      // Sauvegarde des médias séparément (toujours envoyer l'état actuel)
+      if (id) {
         await api.post(`/api/admin/projects/${id}/media/replace`, {
           items: form.media.map((m, i) => ({ url: m.url, type: m.type, order: i })),
         })
-      } else if (id && projectId) {
-        // Mise à jour sans médias → on vide
-        await api.post(`/api/admin/projects/${id}/media/replace`, { items: [] })
       }
 
       router.push('/admin/projets')
@@ -133,15 +130,6 @@ export default function ProjectForm({ initialData, projectId }: Props) {
             <label className="label block mb-2">TITRE *</label>
             <input type="text" value={form.title} required onChange={handleTitleChange} className={inputCls} />
           </div>
-          <div>
-            <label className="label block mb-2">SLUG *</label>
-            <input
-              type="text" value={form.slug} required
-              onChange={e => setForm(f => ({ ...f, slug: e.target.value }))}
-              className={`${inputCls} font-mono text-sm`}
-            />
-          </div>
-
           {/* Catégorie */}
           <div>
             <label className="label block mb-2">CATÉGORIE *</label>
