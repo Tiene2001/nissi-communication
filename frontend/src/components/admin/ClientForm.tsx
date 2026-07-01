@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import api from '@/lib/api'
-import MediaUpload from './MediaUpload'
+import LogoUpload from './LogoUpload'
 
 const PUBLIC_API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'
 function resolveUrl(url: string) {
@@ -27,8 +27,7 @@ export default function ClientForm({ initialData, onSaved, onCancel }: Props) {
   const [saving, setSaving] = useState(false)
   const [error,  setError]  = useState('')
 
-  const handleLogoUploaded = (url: string) =>
-    setForm(f => ({ ...f, logo: url }))
+  const handleLogoUploaded = (url: string) => setForm(f => ({ ...f, logo: url }))
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -81,7 +80,7 @@ export default function ClientForm({ initialData, onSaved, onCancel }: Props) {
             </button>
           </div>
         ) : (
-          <MediaUpload onUploaded={handleLogoUploaded} />
+          <LogoUpload onUploaded={handleLogoUploaded} />
         )}
       </div>
 
