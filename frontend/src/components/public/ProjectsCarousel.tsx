@@ -112,9 +112,9 @@ export default function ProjectsCarousel({ projects, title = 'Création', sectio
     setCurrent(c => (c + 1) % Math.max(total, 1))
   }
 
-  const leftProject   = total >= 3 ? projects[getIndex(-1)] : null
+  const leftProject   = total >= 2 ? projects[getIndex(-1)] : null
   const centerProject = total > 0  ? projects[getIndex(0)]  : null
-  const rightProject  = total >= 3 ? projects[getIndex(1)]  : null
+  const rightProject  = total >= 2 ? projects[getIndex(1)]  : null
 
   const indicators = total > 1 ? projects : [null, null, null]
 
