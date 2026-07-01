@@ -76,7 +76,7 @@ export default function Navigation() {
             if (pathname === '/accueil') {
               document.getElementById('hero')?.scrollIntoView({ behavior: 'smooth' })
             } else {
-              router.push('/accueil')
+              window.location.href = '/accueil'
             }
           }}
           className="flex items-center"
