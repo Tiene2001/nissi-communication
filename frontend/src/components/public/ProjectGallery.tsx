@@ -19,7 +19,7 @@ interface Props {
 }
 
 export default function ProjectGallery({ media, title }: Props) {
-  const [lightboxItem, setLightboxItem] = useState<Media | null>(null)
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
 
   const items = media.filter(m => m.type === 'IMAGE' || m.type === 'VIDEO')
@@ -27,6 +27,10 @@ export default function ProjectGallery({ media, title }: Props) {
   const scroll = (dir: 'left' | 'right') => {
     scrollRef.current?.scrollBy({ left: dir === 'left' ? -600 : 600, behavior: 'smooth' })
   }
+
+  const lightboxItem = lightboxIndex !== null ? items[lightboxIndex] : null
+  const lightboxPrev = () => setLightboxIndex(i => i !== null ? (i - 1 + items.length) % items.length : null)
+  const lightboxNext = () => setLightboxIndex(i => i !== null ? (i + 1) % items.length : null)
 
   if (!items.length) return null
 
@@ -70,7 +74,7 @@ export default function ProjectGallery({ media, title }: Props) {
               key={m.id}
               className="gallery-item relative flex-none w-[80vw] md:w-[600px] h-[400px] snap-center cursor-pointer"
               style={{ zIndex: i + 10 }}
-              onClick={() => setLightboxItem(m)}
+              onClick={() => setLightboxIndex(i)}
             >
               {m.type === 'VIDEO' ? (
                 <>
@@ -108,30 +112,68 @@ export default function ProjectGallery({ media, title }: Props) {
       {lightboxItem && (
         <div
           className="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center"
-          onClick={() => setLightboxItem(null)}
+          onClick={() => setLightboxIndex(null)}
         >
+          {/* Fermer */}
           <button
-            className="absolute top-8 right-8 text-white/50 hover:text-white text-4xl font-light leading-none"
-            onClick={() => setLightboxItem(null)}
+            className="absolute top-8 right-8 text-white/50 hover:text-white text-4xl font-light leading-none z-10"
+            onClick={() => setLightboxIndex(null)}
             aria-label="Fermer"
           >
             ×
           </button>
+
+          {/* Précédent */}
+          {items.length > 1 && (
+            <button
+              className="absolute left-4 md:left-8 z-10 w-12 h-12 flex items-center justify-center border border-white/20 text-white hover:bg-white hover:text-black transition-all"
+              onClick={e => { e.stopPropagation(); lightboxPrev() }}
+              aria-label="Précédent"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path d="M15 19l-7-7 7-7" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} />
+              </svg>
+            </button>
+          )}
+
+          {/* Média */}
           {lightboxItem.type === 'VIDEO' ? (
             <video
+              key={lightboxItem.id}
               src={resolveUrl(lightboxItem.url)}
               controls
               autoPlay
-              className="max-w-[90%] max-h-[85vh]"
+              className="max-w-[80%] max-h-[85vh]"
               onClick={e => e.stopPropagation()}
             />
           ) : (
             <img
+              key={lightboxItem.id}
               src={resolveUrl(lightboxItem.url)}
               alt="Image agrandie"
-              className="max-w-[90%] max-h-[85vh] object-contain"
+              className="max-w-[80%] max-h-[85vh] object-contain"
               onClick={e => e.stopPropagation()}
             />
+          )}
+
+          {/* Suivant */}
+          {items.length > 1 && (
+            <button
+              className="absolute right-4 md:right-8 z-10 w-12 h-12 flex items-center justify-center border border-white/20 text-white hover:bg-white hover:text-black transition-all"
+              onClick={e => { e.stopPropagation(); lightboxNext() }}
+              aria-label="Suivant"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path d="M9 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} />
+              </svg>
+            </button>
+          )}
+
+          {/* Compteur */}
+          {items.length > 1 && lightboxIndex !== null && (
+            <p className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/40 text-xs uppercase tracking-widest">
+              {lightboxIndex + 1} / {items.length}
+            </p>
           )}
         </div>
       )}
