@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import api from '@/lib/api'
-import LogoUpload from './LogoUpload'
+import MediaUpload from './MediaUpload'
 
 const PUBLIC_API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'
 function resolveUrl(url: string) {
@@ -80,7 +80,7 @@ export default function ClientForm({ initialData, onSaved, onCancel }: Props) {
             </button>
           </div>
         ) : (
-          <LogoUpload onUploaded={handleLogoUploaded} />
+          <MediaUpload onUploaded={handleLogoUploaded} />
         )}
       </div>
 
