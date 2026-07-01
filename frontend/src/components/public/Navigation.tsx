@@ -53,7 +53,7 @@ export default function Navigation() {
     if (pathname === '/accueil') {
       smoothScrollTo(id)
     } else {
-      router.push(`/accueil#${id}`)
+      window.location.href = `/accueil#${id}`
     }
   }
 
