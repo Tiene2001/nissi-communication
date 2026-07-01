@@ -95,13 +95,19 @@ export class ContactService {
     throw lastError;
   }
 
-  private async resolveNotifyEmail(): Promise<string> {
+  private async resolveNotifyEmails(): Promise<string[]> {
     try {
       const settings = await this.prisma.pageContent.findUnique({ where: { section: 'settings' } });
-      const email = (settings?.data as any)?.notificationEmail;
-      if (email && typeof email === 'string' && email.includes('@')) return email;
+      const data = settings?.data as any;
+      const emails = [
+        data?.notificationEmail,
+        data?.notificationEmail2,
+        data?.notificationEmail3,
+      ].filter((e): e is string => typeof e === 'string' && e.includes('@'));
+      if (emails.length > 0) return emails;
     } catch { /* fallback */ }
-    return this.config.get('NOTIFY_EMAIL') ?? '';
+    const fallback = this.config.get('NOTIFY_EMAIL');
+    return fallback ? [fallback] : [];
   }
 
   private async sendEmailNotification(dto: CreateContactDto) {
@@ -109,7 +115,9 @@ export class ContactService {
     const host   = this.config.get('SMTP_HOST');
     const user   = this.config.get('SMTP_USER');
     const secure = port === 465;
-    const notifyEmail = await this.resolveNotifyEmail();
+    const notifyEmails = await this.resolveNotifyEmails();
+    if (notifyEmails.length === 0) return;
+    const notifyEmail = notifyEmails.join(', ');
 
     this.logger.log(`SMTP → ${host}:${port} secure=${secure} from=${user} to=${notifyEmail}`);
 

@@ -5,7 +5,9 @@ import api from '@/lib/api'
 
 interface Settings {
   /* Notifications */
-  notificationEmail: string
+  notificationEmail:  string
+  notificationEmail2: string
+  notificationEmail3: string
   /* Métadonnées SEO */
   siteTitle:         string
   siteDescription:   string
@@ -21,7 +23,9 @@ interface Settings {
 }
 
 const EMPTY: Settings = {
-  notificationEmail: '',
+  notificationEmail:  '',
+  notificationEmail2: '',
+  notificationEmail3: '',
   siteTitle:         '',
   siteDescription:   '',
   phone1:            '',
@@ -89,17 +93,27 @@ export default function AdminParametresPage() {
 
             {/* Notifications */}
             <div className="card p-8 bg-surface-container">
-              <h2 className="label mb-6">NOTIFICATIONS</h2>
-              <div>
-                <label className="label block mb-2">EMAIL DE NOTIFICATION</label>
-                <input
-                  type="email" value={settings.notificationEmail} onChange={set('notificationEmail')}
-                  placeholder="contact@nissi-communication.com"
-                  className={inputCls}
-                />
-                <p className="font-body text-on-surface-muted text-xs mt-2">
-                  Adresse qui reçoit les nouvelles demandes de contact
-                </p>
+              <h2 className="label mb-2">NOTIFICATIONS</h2>
+              <p className="font-body text-on-surface-muted text-xs mb-6">
+                Jusqu'à 3 adresses recevront les nouvelles demandes de contact
+              </p>
+              <div className="space-y-4">
+                {([
+                  { key: 'notificationEmail'  as const, label: 'EMAIL 1 (principal) *' },
+                  { key: 'notificationEmail2' as const, label: 'EMAIL 2 (optionnel)'   },
+                  { key: 'notificationEmail3' as const, label: 'EMAIL 3 (optionnel)'   },
+                ] as const).map(({ key, label }) => (
+                  <div key={key}>
+                    <label className="label block mb-2">{label}</label>
+                    <input
+                      type="email"
+                      value={settings[key]}
+                      onChange={set(key)}
+                      placeholder="exemple@domaine.com"
+                      className={inputCls}
+                    />
+                  </div>
+                ))}
               </div>
             </div>
 
