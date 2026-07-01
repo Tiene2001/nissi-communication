@@ -24,13 +24,13 @@ export default function ClientsSection({ clients }: Props) {
         <h2 className="reveal text-[#FF8000] text-3xl font-bold text-center tracking-tight mb-16">
           Nos précieux Fidèles
         </h2>
-        <div className="reveal reveal-delay-2 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 items-center justify-items-center">
+        <div className="reveal reveal-delay-2 flex flex-wrap justify-center gap-x-12 gap-y-8 items-center">
           {clients.map(client => (
-            <div key={client.id}>
+            <div key={client.id} className="flex items-center justify-center w-[120px]">
               <img
                 src={resolveUrl(client.logo)}
                 alt={client.name}
-                className="h-12 w-auto object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300 cursor-pointer"
+                className="h-12 w-auto max-w-[120px] object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-300 cursor-pointer"
               />
             </div>
           ))}
