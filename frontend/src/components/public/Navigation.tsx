@@ -68,7 +68,7 @@ export default function Navigation() {
         boxShadow: '0 4px 24px rgba(0, 0, 0, 0.35)',
       }}
     >
-      <div className="px-8 md:px-12 flex items-center justify-between py-2">
+      <div className="px-8 md:px-12 flex items-center justify-between py-3">
         <a
           href="/"
           onClick={e => {
@@ -84,7 +84,7 @@ export default function Navigation() {
           <img
             src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAXzN9MJvPDgD9EG5DMIQ_tkDamV5NNxoCW4alvzjhaGFw8grfOMD512UszGG37s7f_jzw4LFWT6p2Wx-AwD3Zk75pdmqdV7B6_SdkO2bqD_h8lgCKSbNnCPuiCUjHoYKX5bjnOpVjvJUMDvuAyPJ3MBUNDPEbyK9Ek_AAq4-pg2pIuqYLDeAR8WZwWbjoYjkoYkEasNHIGKzFS3rmkYvH-AFGx1fpTRgxgFZJDeemKW2YaviUpOCCTUxY3eJkc54NLtSxpIaCOp0"
             alt="NISSI Communication"
-            className="h-8 w-auto object-contain transition-all duration-500"
+            className="h-11 w-auto object-contain transition-all duration-500"
             style={{ filter: logoOnWhite ? 'invert(1) hue-rotate(180deg)' : 'none' }}
           />
         </a>
